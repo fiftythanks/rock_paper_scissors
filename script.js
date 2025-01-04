@@ -6,3 +6,6 @@ function getComputerChoice() {
 }
 
 // The player picks rock, paper or scissors 
+function getHumanChoice() {
+  return prompt("Rock, paper, scissors?").toLowerCase();
+} 
