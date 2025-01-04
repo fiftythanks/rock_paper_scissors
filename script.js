@@ -25,19 +25,20 @@ function playRound(humanChoice, computerChoice) {
     if (humanChoice === "rock") {
       if (computerChoice === "scissors") { 
         humanScore++;
-        console.log("You win! The other player chose scissors. Rock beats scissors.")
-        return `User: ${humanScore}, computer: ${computerScore}`;
+        console.log(`You win! The other player chose scissors. Rock beats scissors.
+          \nUser: ${humanScore}, computer: ${computerScore}`);
       } else if (computerChoice === "paper") { 
         computerScore++;
-        console.log("You lose! The other player chose paper. Paper beats rock.")
-        return `User: ${humanScore}, computer: ${computerScore}`;
+        console.log(`You lose! The other player chose paper. Paper beats rock
+          \nUser: ${humanScore}, computer: ${computerScore}`);
       }
     }
     
     // User picks paper
 
     // User picks scissors
-  }
 
-  // User picks the same thing the computer picked
+  } else { // User picks the same thing the computer picked
+    console.log(`It's a draw! The other player chose ${computerChoice} as well.`);
+  }
 }
