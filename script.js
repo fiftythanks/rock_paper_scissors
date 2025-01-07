@@ -11,38 +11,45 @@ const footer = document.querySelector("footer");
 const textInput = document.querySelector("input");
 
 function moveToSecond(e) {
-  if (e.key === "Enter") {
-    if (textInput.value !== "") {
-      Array.from(content.querySelectorAll("p")).forEach((para) => {
-        para.remove();
-      });
-      document.querySelector(".label").remove();
-      
-      const para1 = document.createElement("p");
-      const para2 = document.createElement("p");
-      para1.textContent = `Nice to meet you, ${textInput.value}! Now, one more question. How many rounds do you want to play each game? You will be able to play as many rounds as you wish, but it will be somewhat unfair to the other player, therefore you must decide beforehand what amount of rounds will be considered fair.`
-      para2.textContent = `As before, type the desired amount in the section below. The input has to be integers only.`;
 
-      content.appendChild(para1);
-      content.appendChild(para2);
+    if (e.key === "Enter") {
+      if (textInput.value !== "") {
+        Array.from(content.querySelectorAll("p")).forEach((para) => {
+          para.remove();
+        });
+        document.querySelector(".label").remove();
+        
+        const para1 = document.createElement("p");
+        const para2 = document.createElement("p");
+        para1.textContent = `Nice to meet you, ${textInput.value}! Now, one more question. How many rounds do you want to play each game? You will be able to play as many rounds as you wish, but it will be somewhat unfair to the other player, therefore you must decide beforehand what amount of rounds will be considered fair.`
+        para2.textContent = `As before, type the desired amount in the section below. The input has to be integers only.`;
 
-      var userName = textInput.value;
-      var numberInput = textInput;
-      numberInput.setAttribute("type", "number");
-      numberInput.setAttribute("id", "rounds");
-      numberInput.setAttribute("name", "rounds");
-      numberInput.setAttribute("placeholder", "Desired number");
-      numberInput.value = "";
+        content.appendChild(para1);
+        content.appendChild(para2);
 
-      document.removeEventListener("keypress", moveToSecond);
+        var userName = textInput.value;
+        var numberInput = textInput;
+        numberInput.setAttribute("type", "number");
+        numberInput.setAttribute("id", "rounds");
+        numberInput.setAttribute("name", "rounds");
+        numberInput.setAttribute("placeholder", "Number");
+        numberInput.value = "";
 
+        textInput.removeEventListener("keypress", moveToSecond);
+
+      } else {
+        textInput.classList.add("shake-lr");
+        document.addEventListener("animationend", () => {
+          textInput.classList.remove("shake-lr");
+        });
+        if (e.target !== textInput) textInput.focus();
+      } 
     } else {
-      textInput.classList.add("shake-lr");
-      textInput.addEventListener("animationend", () => {
-        textInput.classList.remove("shake-lr");
-      })
-    } 
-  }
+      if (e.target !== textInput) {
+        textInput.focus();
+        textInput.value += `${e.key}`;
+      }
+    }
 }
 
 document.addEventListener("keypress", moveToSecond);
