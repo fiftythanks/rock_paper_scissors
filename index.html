@@ -4,8 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rock Paper Scissors</title>
-  <script src="script.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
 <body>
+  <div id="dialog-window">
+    <h1>Test</h1>
+    <div id="content">
+      <p>Welcome! My name is Mikhail, and this is a simple <a href="https://en.wikipedia.org/wiki/Rock_paper_scissors" target="_blank">Rock Paper Scissors</a> game.</p>
+      <p>It was made as an assignment for <a href="https://www.theodinproject.com/lessons/foundations-revisiting-rock-paper-scissors" target="_blank" title="The Odin Project is a free programming course that teaches full stack web development from the ground up. It is generally recommended as the starting point for a beginner’s journey into software development on r/learnprogramming.">the Odin Project</a>. You can find this game’s source code on my <a href=https://github.com/fiftythanks/rock_paper_scissors/tree/rps-ui target="_blank">GitHub page</a>.</p>
+      <p>Let’s get to know each other before you begin playing.</p>
+    </div>
+    <footer id="footer">
+      <label class="label" for="name">What is your name?</label>
+      <input type="text" id="name" name="name" required size="10" placeholder="Your Name">
+      <p id="tip">(Press <kbd>Enter</kbd> to continue.)</p>
+    </footer>
+  </div>
 </body>
 </html>

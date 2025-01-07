@@ -1,149 +1,207 @@
-let pick = ["rock", "paper", "scissors"];
 
-// The computer gives a random choice between rock, paper and scissors
-function getComputerChoice() {
-  return pick[Math.floor(Math.random() * 3)];
-}
+/* 
+1. First time on the page. First dialog window. 
+1.1. User inputs their name.
+1.2. User presses Enter.
+If name isn't an empty string, assign the username to a variable and move to the next dialog window.
+Else ask User to input their name.
+*/
+const content = document.querySelector("#content");
+const footer = document.querySelector("footer");
+const textInput = document.querySelector("input");
 
-// The player picks rock, paper or scissors 
-function getHumanChoice() {
-  return prompt("Rock, paper, scissors?").toLowerCase();
-} 
+function moveToSecond(e) {
+  if (e.key === "Enter") {
+    if (textInput.value !== "") {
+      Array.from(content.querySelectorAll("p")).forEach((para) => {
+        para.remove();
+      });
+      document.querySelector(".label").remove();
+      
+      const para1 = document.createElement("p");
+      const para2 = document.createElement("p");
+      para1.textContent = `Nice to meet you, ${textInput.value}! Now, one more question. How many rounds do you want to play each game? You will be able to play as many rounds as you wish, but it will be somewhat unfair to the other player, therefore you must decide beforehand what amount of rounds will be considered fair.`
+      para2.textContent = `As before, type the desired amount in the section below. The input has to be integers only.`;
 
-// Declare the players score variables
-let humanScore;
-let computerScore;
+      content.appendChild(para1);
+      content.appendChild(para2);
 
-// Declare the desire to do another round variable
-let cont;
+      var userName = textInput.value;
+      var numberInput = textInput;
+      numberInput.setAttribute("type", "number");
+      numberInput.setAttribute("id", "rounds");
+      numberInput.setAttribute("name", "rounds");
+      numberInput.setAttribute("placeholder", "Desired number");
+      numberInput.value = "";
 
-// Single round logic
-// Rock beats scissors, paper beats rock, scissors beat paper
-function playRound(humanChoice, computerChoice) {
+      document.removeEventListener("keypress", moveToSecond);
 
-  // User picks something different from what the computer picks
-  if (computerChoice !== humanChoice && (humanChoice === "rock" || humanChoice === "paper" || humanChoice === "scissors")) {
-
-    // User picks rock
-    if (humanChoice === "rock") {
-      if (computerChoice === "scissors") {
-        console.log(`You win! The other player chose scissors. Rock beats scissors. \nUser: ${++humanScore}, computer: ${computerScore}`);
-      } else if (computerChoice === "paper") { 
-        console.log(`You lose! The other player chose paper. Paper beats rock. \nUser: ${humanScore}, computer: ${++computerScore}`);
-      }
-    
-    // User picks paper
-    } else if (humanChoice === "paper") {
-      if (computerChoice === "rock") {
-        console.log(`You win! The other player chose rock. Paper beats rock. \nUser: ${++humanScore}, computer: ${computerScore}`)
-      } else if (computerChoice === "scissors") {
-        console.log(`You lose! The other player chose scissors. Scissors beat paper. \nUser: ${humanScore}, computer: ${++computerScore}`);
-      }
-
-    // User picks scissors
-    } else if (humanChoice === "scissors") {
-      if (computerChoice === "paper") {
-        console.log(`You win! The other player chose paper. Scissors beat paper. \nUser: ${++humanScore}, computer: ${computerScore}`)
-      } else if (computerChoice === "rock") {
-        console.log(`You lose! The other player chose rock. Rock beats scissors. \nUser: ${humanScore}, computer: ${++computerScore}`);
-      }
-    }
-
-  // User picks the same thing the computer picked
-  } else if (humanChoice === computerChoice) {
-    console.log(`It's a draw! The other player chose ${computerChoice} as well.`);
-  } else {
-    console.error("Try again.");
-    return cont = "again";
-  }
-
-  // Let user decide if he/she wants to play another round
-  return cont = prompt("Do you want to play another round? Type n or no for no or anything else for yes.").toLowerCase();
-}
-
-// The whole game logic
-console.log("This is a simple Rock Paper Scissors game. You will play against your computer. Each round, you'll have to choose rock, paper or scissors. The computer will choose something too. If you win, you get one point. If the computer wins, the computer gets the point. There supposed to be five rounds and if you decide to stop playing before the fifth round, you'll lose.");
-
-let start = prompt("Type n to not play the game. Type anything else to start the game.");
-
-if (start !== "n") {
-  let games = 0;
-  let fairWins = 0;
-  let wins = 0;
-  let rounds;
-  let fairResults = [];
-  let results = [];
-
-  // The whole game
-  while (start !== "n") {
-    games++;
-    rounds = 0;
-    humanScore = 0;
-    computerScore = 0;
-    cont = "y";
-
-    // One game
-    while(cont !== "n" && cont !== "no") {
-      rounds++;
-      if (rounds === 5 && cont !== "again") {
-        console.log("This game is supposed to be five-round. This is the fifth round, supposedly the last. But if you want to play extra rounds, just continue answering yes to the question at the end of rounds.");
-      }
-      playRound(getHumanChoice(), getComputerChoice());
-      if (cont === "again") { 
-        rounds--;
-        continue; 
-      } 
-
-      if (rounds === 5) {
-        fairResults.push([humanScore, computerScore]);
-      }
-    }
-    results.push([humanScore, computerScore]); 
-
-    // One game results
-    if (rounds < 5) {
-      console.log("You lose the game because you quit.");
-      fairResults.push([humanScore, computerScore]);
-      start = prompt("Do you want to play one more game?");
     } else {
-      // if humanScore was greater than computerScore by the fifth round
-      if (fairResults[games - 1][0] > fairResults[games - 1][1]) { 
-        fairWins++;
-        wins++;
-        console.log(`You win game ${games} fairly. Congratulations!`);
-
-      // if computerScore was greater than humanScore by the fifth round but humanScore is greater than computerScore now
-      } else if (fairResults[games - 1][1] > fairResults[games - 1][0] && humanScore > computerScore) {
-        console.log(`You lose game ${games} fairly, but you win if you count the extra rounds.`);
-        wins++;
-
-      // if computerScore was and is greater in both cases
-      } else if (fairResults[games - 1][1] > fairResults[games - 1][0] && humanScore < computerScore) {
-        console.log(`You lose game ${games}.`);
-        
-      // if the scores were and are equal
-      } else if (fairResults[games - 1][0] === fairResults[games - 1][1] && humanScore === computerScore) {
-        console.log(`Game ${games} is a draw.`);
-
-      // if the scores were equal but aren't now
-      } else if (fairResults[games - 1][0] === fairResults[games - 1][1] && humanScore !== computerScore) {
-        if (humanScore > computerScore) {
-          console.log(`Fairly, game ${games} is a draw. But if you count the extra rounds, you win.`);
-          wins++;
-        } else if (computerScore) {
-          console.log(`Fairly, game ${games} is a draw. But if you count the extra rounds, you lose.`);
-        }
-      }
-
-      start = prompt("Do you want to play one more game?");
-    }
+      textInput.classList.add("shake-lr");
+      textInput.addEventListener("animationend", () => {
+        textInput.classList.remove("shake-lr");
+      })
+    } 
   }
-
-  console.log("You finished your game. The results:");
-  console.log(`Fair wins: ${fairWins}\nWins: ${wins}`);
-  for(let i = 0; i < games; i++) {
-    console.log(`Game ${i + 1}: ${fairResults[i][0]}-${fairResults[i][1]} fairly, ${results[i][0]}-${results[i][1]} counting extra rounds`);
-  }
-} else {
-  console.log("You declined the offer to play the game.");
 }
+
+document.addEventListener("keypress", moveToSecond);
+
+
+/*
+2. Second dialog window.
+*/
+
+
+
+// --- Game logic ---
+
+// let pick = ["rock", "paper", "scissors"];
+
+// // The computer gives a random choice between rock, paper and scissors
+// function getComputerChoice() {
+//   return pick[Math.floor(Math.random() * 3)];
+// }
+
+// // The player picks rock, paper or scissors 
+// function getHumanChoice() {
+//   return prompt("Rock, paper, scissors?").toLowerCase();
+// } 
+
+// // Declare the players score variables
+// let humanScore;
+// let computerScore;
+
+// // Declare the desire to do another round variable
+// let cont;
+
+// // Single round logic
+// // Rock beats scissors, paper beats rock, scissors beat paper
+// function playRound(humanChoice, computerChoice) {
+
+//   // User picks something different from what the computer picks
+//   if (computerChoice !== humanChoice && (humanChoice === "rock" || humanChoice === "paper" || humanChoice === "scissors")) {
+
+//     // User picks rock
+//     if (humanChoice === "rock") {
+//       if (computerChoice === "scissors") {
+//         console.log(`You win! The other player chose scissors. Rock beats scissors. \nUser: ${++humanScore}, computer: ${computerScore}`);
+//       } else if (computerChoice === "paper") { 
+//         console.log(`You lose! The other player chose paper. Paper beats rock. \nUser: ${humanScore}, computer: ${++computerScore}`);
+//       }
+    
+//     // User picks paper
+//     } else if (humanChoice === "paper") {
+//       if (computerChoice === "rock") {
+//         console.log(`You win! The other player chose rock. Paper beats rock. \nUser: ${++humanScore}, computer: ${computerScore}`)
+//       } else if (computerChoice === "scissors") {
+//         console.log(`You lose! The other player chose scissors. Scissors beat paper. \nUser: ${humanScore}, computer: ${++computerScore}`);
+//       }
+
+//     // User picks scissors
+//     } else if (humanChoice === "scissors") {
+//       if (computerChoice === "paper") {
+//         console.log(`You win! The other player chose paper. Scissors beat paper. \nUser: ${++humanScore}, computer: ${computerScore}`)
+//       } else if (computerChoice === "rock") {
+//         console.log(`You lose! The other player chose rock. Rock beats scissors. \nUser: ${humanScore}, computer: ${++computerScore}`);
+//       }
+//     }
+
+//   // User picks the same thing the computer picked
+//   } else if (humanChoice === computerChoice) {
+//     console.log(`It's a draw! The other player chose ${computerChoice} as well.`);
+//   } else {
+//     console.error("Try again.");
+//     return cont = "again";
+//   }
+
+//   // Let user decide if he/she wants to play another round
+//   return cont = prompt("Do you want to play another round? Type n or no for no or anything else for yes.").toLowerCase();
+// }
+
+// // The whole game logic
+// console.log("This is a simple Rock Paper Scissors game. You will play against your computer. Each round, you'll have to choose rock, paper or scissors. The computer will choose something too. If you win, you get one point. If the computer wins, the computer gets the point. There supposed to be five rounds and if you decide to stop playing before the fifth round, you'll lose.");
+
+// let start = prompt("Type n to not play the game. Type anything else to start the game.");
+
+// if (start !== "n") {
+//   let games = 0;
+//   let fairWins = 0;
+//   let wins = 0;
+//   let rounds;
+//   let fairResults = [];
+//   let results = [];
+
+//   // The whole game
+//   while (start !== "n") {
+//     games++;
+//     rounds = 0;
+//     humanScore = 0;
+//     computerScore = 0;
+//     cont = "y";
+
+//     // One game
+//     while(cont !== "n" && cont !== "no") {
+//       rounds++;
+//       if (rounds === 5 && cont !== "again") {
+//         console.log("This game is supposed to be five-round. This is the fifth round, supposedly the last. But if you want to play extra rounds, just continue answering yes to the question at the end of rounds.");
+//       }
+//       playRound(getHumanChoice(), getComputerChoice());
+//       if (cont === "again") { 
+//         rounds--;
+//         continue; 
+//       } 
+
+//       if (rounds === 5) {
+//         fairResults.push([humanScore, computerScore]);
+//       }
+//     }
+//     results.push([humanScore, computerScore]); 
+
+//     // One game results
+//     if (rounds < 5) {
+//       console.log("You lose the game because you quit.");
+//       fairResults.push([humanScore, computerScore]);
+//       start = prompt("Do you want to play one more game?");
+//     } else {
+//       // if humanScore was greater than computerScore by the fifth round
+//       if (fairResults[games - 1][0] > fairResults[games - 1][1]) { 
+//         fairWins++;
+//         wins++;
+//         console.log(`You win game ${games} fairly. Congratulations!`);
+
+//       // if computerScore was greater than humanScore by the fifth round but humanScore is greater than computerScore now
+//       } else if (fairResults[games - 1][1] > fairResults[games - 1][0] && humanScore > computerScore) {
+//         console.log(`You lose game ${games} fairly, but you win if you count the extra rounds.`);
+//         wins++;
+
+//       // if computerScore was and is greater in both cases
+//       } else if (fairResults[games - 1][1] > fairResults[games - 1][0] && humanScore < computerScore) {
+//         console.log(`You lose game ${games}.`);
+
+//       // if the scores were and are equal
+//       } else if (fairResults[games - 1][0] === fairResults[games - 1][1] && humanScore === computerScore) {
+//         console.log(`Game ${games} is a draw.`);
+
+//       // if the scores were equal but aren't now
+//       } else if (fairResults[games - 1][0] === fairResults[games - 1][1] && humanScore !== computerScore) {
+//         if (humanScore > computerScore) {
+//           console.log(`Fairly, game ${games} is a draw. But if you count the extra rounds, you win.`);
+//           wins++;
+//         } else if (computerScore) {
+//           console.log(`Fairly, game ${games} is a draw. But if you count the extra rounds, you lose.`);
+//         }
+//       }
+
+//       start = prompt("Do you want to play one more game?");
+//     }
+//   }
+
+//   console.log("You finished your game. The results:");
+//   console.log(`Fair wins: ${fairWins}\nWins: ${wins}`);
+//   for(let i = 0; i < games; i++) {
+//     console.log(`Game ${i + 1}: ${fairResults[i][0]}-${fairResults[i][1]} fairly, ${results[i][0]}-${results[i][1]} counting extra rounds`);
+//   }
+// } else {
+//   console.log("You declined the offer to play the game.");
+// }
