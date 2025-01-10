@@ -34,9 +34,9 @@ function moveToSecond(e) {
       numberInput.setAttribute("id", "rounds");
       numberInput.setAttribute("name", "rounds");
       numberInput.setAttribute("placeholder", "Number");
-      numberInput.value = "";
+      numberInput.value = ""; 
 
-      textInput.removeEventListener("keypress", moveToSecond);
+      document.removeEventListener("keypress", moveToSecond);
       document.addEventListener("keypress", moveToIntroduction);
 
     } else {
@@ -66,16 +66,14 @@ function moveToIntroduction(e) {
         para.remove();
       });
       numberInput.remove();
-      foot.querySelector("kbd").replaceWith("any key");
+      footer.querySelector("kbd").replaceWith("any key");
+      document.removeEventListener("keypress", moveToIntroduction)
     } else {
       numberInput.classList.add("shake-lr");
-      document.addEventListener("animationend", () => {
-        numberInput.classList.remove("shake-lr");
-      });
       if (e.target !== numberInput) textInput.focus();
     }
   } else if (e.key !== "Enter") {
-    e.preventDefault();
+    e.preventDefault(); // why?
   }
 }
 
