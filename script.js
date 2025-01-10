@@ -108,6 +108,7 @@ function moveToIntroduction(e) {
 }
 
 function startGame(e) {
+  // First game logic start
   Array.from(content.querySelectorAll("p")).forEach((para) => {
     para.remove();
   });
@@ -115,12 +116,8 @@ function startGame(e) {
   // centralize content elements
   content.classList.toggle("flex-centralize");
 
-  // replace "any key" in the tip with "Enter" in a semantically correct way
-  const kbd = document.createElement("kbd");
-  kbd.textContent = "Enter";
-  const tip = footer.querySelector("#tip");
-  tip.childNodes[1].replaceWith(kbd);
-
+  ready = document.querySelector("#tip");
+  ready.innerHTML = `Press <kbd>Enter</kbd> to start`;
   content.appendChild(tip);
 
   games = 1;
@@ -128,10 +125,83 @@ function startGame(e) {
   game.textContent = `Game ${games}`;
   dialogWindow.insertBefore(game, content);
   
-  const round = document.createElement("h2");
-  round.textContent = `Round ${rounds}`;
-  dialogWindow.insertBefore(round, content);
+  let round = 1;
+  const roundTitle = document.createElement("h2");
+  roundTitle.textContent = `Round ${round}`;
+  dialogWindow.insertBefore(roundTitle, content);
+
+  var footerToggle = 1;
+  function toggleFooter() {
+    if (footerToggle === 1) {
+      footer.style.display = "none";
+      content.style.height = "100%";
+      footerToggle = 0;
+    } else if (footerToggle === 0) {
+      footer.style.cssText = "";
+      content.style.height = "";
+      footerToggle = 1;
+    }
+  }
+
+  toggleFooter();
+  // first game logic end
+
+  removeEventListener("keypress", startGame);
+  addEventListener("keypress", startRound);
+
+  function startRound(e) {
+    Array.from(content.children).forEach((child) => {
+      if (child === ready) {
+        child.style.display = "none";
+      } else {
+        child.remove();
+      }
+    });
+    content.classList.toggle("flex-centralize");
+    content.classList.toggle("flex-vertical");
+
+    const choose = document.createElement("p");
+    choose.textContent = "Choose your weapon:";
+    choose.style.alignSelf = "start";
+    choose.style.marginTop = "0";
+    content.appendChild(choose);
   
+    const weapons = document.createElement("div");
+    weapons.classList.add("weapons");
+    content.appendChild(weapons);
+  
+    const rock = document.createElement("img");
+    rock.classList.add("weapon");
+    rock.setAttribute("src", "img/rock.svg");
+    rock.style.width = "87px";
+    rock.style.height = "98px";
+    rock.style.transform = "rotate(90deg)";
+    weapons.appendChild(rock);
+  
+    const paper = document.createElement("img");
+    paper.classList.add("weapon");
+    paper.setAttribute("src", "img/paper.svg");
+    paper.style.width = "87px";
+    paper.style.height = "87px";
+    paper.style.transform = "rotate(90deg)"
+    weapons.appendChild(paper);
+  
+    const scissors = document.createElement("img");
+    scissors.classList.add("weapon");
+    scissors.setAttribute("src", "img/scissors.svg");
+    scissors.style.width = "90px";
+    scissors.style.height = "87px";
+    scissors.style.transform = "scaleX(-1)"
+    weapons.appendChild(scissors);
+
+    toggleFooter();
+    const rockCount = document.createElement("img");
+    rockCount.classList.add("rock-count");
+    rockCount.setAttribute("src", "img/rock.svg");
+    rockCount.style.width = "87px";
+    rockCount.style.height = "98px";
+    footer.appendChild(rockCount);
+  }
 }
 
 document.addEventListener("keypress", moveToSecond);
