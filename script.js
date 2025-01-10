@@ -6,6 +6,7 @@
 If name isn't an empty string, assign the username to a variable and move to the next dialog window.
 Else ask User to input their name.
 */
+const dialogWindow = document.querySelector("#dialog-window")
 const content = document.querySelector("#content");
 const footer = document.querySelector("footer");
 const textInput = document.querySelector("input");
@@ -62,15 +63,38 @@ function moveToIntroduction(e) {
     }
   } else if (e.key === "Enter") {
     if (numberInput.value !== "") {
+      let rounds = parseInt(numberInput.value);
       Array.from(content.querySelectorAll("p")).forEach((para) => {
         para.remove();
       });
+      for(let i = 1; i <= 5; i++) {
+        const para = document.createElement("p");
+        switch (i) {
+          case 1:
+            para.textContent = `${rounds} rounds. Got it!`;
+            break;
+          case 2:
+            para.textContent = "Just a brief intro. Every round, you’ll have to choose your weapon. To do this, click on the button that displays the corresponding weapon.";
+            break;
+          case 3:
+            para.textContent = "You have a few seconds to choose. If you don’t choose before the time is up, your weapon will be rock.";
+            break;
+          case 4:
+            para.textContent = "This is done to make the game a little more realistic. (I don’t know about you, but it has happened to me many times when I lagged and didn’t form a weapon with my hand in time and had to pretend I’d chosen the rock.)";
+            break;
+          case 5:
+            para.textContent = "You can change your weapon before the time is over.";
+            break;
+        }
+        content.appendChild(para);
+      }
+      content.style.overflow = "scroll";
       numberInput.remove();
       footer.querySelector("kbd").replaceWith("any key");
-      document.removeEventListener("keypress", moveToIntroduction);
       document.removeEventListener("animationend", () => {
         textInput.classList.remove("shake-lr");
       });
+      document.addEventListener("keypress", startGame);
     } else {
       numberInput.classList.add("shake-lr");
       if (e.target !== numberInput) textInput.focus();
@@ -78,6 +102,19 @@ function moveToIntroduction(e) {
   } else if (e.key !== "Enter") {
     e.preventDefault(); // why?
   }
+}
+
+function startGame(e) {
+  
+  let games = 1;
+  const game = document.createElement("h1");
+  game.textContent = `Game ${games}`;
+  dialogWindow.appendChild(game);
+  const round = document.createElement("h2");
+  round.textContent = `Round ${rounds}`;
+  dialogWindow.appendChild(round);
+  const ready = document.createElement("p");
+  ready.textContent = "Press <kbd>Enter</kbd> as soon as you're ready to start.";
 }
 
 document.addEventListener("keypress", moveToSecond);
