@@ -67,7 +67,10 @@ function moveToIntroduction(e) {
       });
       numberInput.remove();
       footer.querySelector("kbd").replaceWith("any key");
-      document.removeEventListener("keypress", moveToIntroduction)
+      document.removeEventListener("keypress", moveToIntroduction);
+      document.removeEventListener("animationend", () => {
+        textInput.classList.remove("shake-lr");
+      });
     } else {
       numberInput.classList.add("shake-lr");
       if (e.target !== numberInput) textInput.focus();
