@@ -11,7 +11,9 @@ const content = document.querySelector("#content");
 const footer = document.querySelector("footer");
 const textInput = document.querySelector("input");
 let userName;
-var numberInput = textInput;
+const numberInput = textInput;
+let rounds;
+let games;
 
 function moveToSecond(e) {
 
@@ -63,7 +65,8 @@ function moveToIntroduction(e) {
     }
   } else if (e.key === "Enter") {
     if (numberInput.value !== "") {
-      let rounds = parseInt(numberInput.value);
+      rounds = parseInt(numberInput.value);
+      numberInput.remove();
       Array.from(content.querySelectorAll("p")).forEach((para) => {
         para.remove();
       });
@@ -89,7 +92,6 @@ function moveToIntroduction(e) {
         content.appendChild(para);
       }
       content.style.overflow = "scroll";
-      numberInput.remove();
       footer.querySelector("kbd").replaceWith("any key");
       document.removeEventListener("animationend", () => {
         textInput.classList.remove("shake-lr");
@@ -110,21 +112,25 @@ function startGame(e) {
     para.remove();
   });
 
-  // to centralize content elements
-  content.сlassList.add("flex-centralize");
+  // centralize content elements
+  content.classList.toggle("flex-centralize");
 
+  // replace "any key" in the tip with "Enter" in a semantically correct way
   const kbd = document.createElement("kbd");
   kbd.textContent = "Enter";
   const tip = footer.querySelector("#tip");
-  tip.textContent.childNodes[1].replaceWith(kbd); // replace "any key" with "Enter" in a semantically correct way
+  tip.childNodes[1].replaceWith(kbd);
 
-  let games = 1;
+  content.appendChild(tip);
+
+  games = 1;
   const game = document.createElement("h1");
   game.textContent = `Game ${games}`;
-  dialogWindow.appendChild(game);
+  dialogWindow.insertBefore(game, content);
+  
   const round = document.createElement("h2");
   round.textContent = `Round ${rounds}`;
-  dialogWindow.appendChild(round);
+  dialogWindow.insertBefore(round, content);
   
 }
 
