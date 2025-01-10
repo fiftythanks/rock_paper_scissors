@@ -94,6 +94,7 @@ function moveToIntroduction(e) {
       document.removeEventListener("animationend", () => {
         textInput.classList.remove("shake-lr");
       });
+      document.removeEventListener("keypress", moveToIntroduction); 
       document.addEventListener("keypress", startGame);
     } else {
       numberInput.classList.add("shake-lr");
@@ -105,7 +106,18 @@ function moveToIntroduction(e) {
 }
 
 function startGame(e) {
-  
+  Array.from(content.querySelectorAll("p")).forEach((para) => {
+    para.remove();
+  });
+
+  // to centralize content elements
+  content.сlassList.add("flex-centralize");
+
+  const kbd = document.createElement("kbd");
+  kbd.textContent = "Enter";
+  const tip = footer.querySelector("#tip");
+  tip.textContent.childNodes[1].replaceWith(kbd); // replace "any key" with "Enter" in a semantically correct way
+
   let games = 1;
   const game = document.createElement("h1");
   game.textContent = `Game ${games}`;
@@ -113,8 +125,7 @@ function startGame(e) {
   const round = document.createElement("h2");
   round.textContent = `Round ${rounds}`;
   dialogWindow.appendChild(round);
-  const ready = document.createElement("p");
-  ready.textContent = "Press <kbd>Enter</kbd> as soon as you're ready to start.";
+  
 }
 
 document.addEventListener("keypress", moveToSecond);

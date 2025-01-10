@@ -155,4 +155,8 @@ kbd {
   font-style: italic;
 }
 
-
+.flex-centralize {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
